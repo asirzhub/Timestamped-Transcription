@@ -1,9 +1,9 @@
 import speech_recognition as sr
 import time
 
-inp = input("Input audio filename: ")
-lis = input("Duration of audio to transcribe: ")
-fre = input("Timestamp Frequency: ")
+inp = input("Input audio filename (do not include .wav): ")
+lis = input("Duration of audio to transcribe (seconds): ")
+fre = input("Timestamp Frequency (seconds): ")
 out = input("Output filename (do not include .csv): ")
 
 def transcribe(inputAudio,listeningTime,frequency,outputFilename):
@@ -17,7 +17,7 @@ def transcribe(inputAudio,listeningTime,frequency,outputFilename):
     outputFileName is a string of the csv file's output name    
     '''
     f = open(outputFilename+".csv","w") # open output file to write to
-    sound = sr.AudioFile(inputAudio) # open audio
+    sound = sr.AudioFile(inputAudio+".wav") # open audio
     
     r = sr.Recognizer() # recognizer object
     snips = [] # array to store all the audio snips if you need them
@@ -39,7 +39,9 @@ def transcribe(inputAudio,listeningTime,frequency,outputFilename):
             f.write(str(second) + "," + text + "\n")# write timestamp+transcribe
             
             second+=frequency# move to the next snip of audio  
-            time.sleep(0.5)
+            time.sleep(0.5)# don't know why but sometimes google's recognition 
+                           # times out, so i thought this might help
+                           # by slowing down the ping rate
     
     f.close()
     
